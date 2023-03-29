@@ -1,29 +1,97 @@
 def solution(park, routes):
-    n, m = len(park), len(park[0])
-    op = {'E': (0, 1), 'W': (0, -1), 'N': (-1, 0), 'S': (1, 0)}
 
-    for l in park:
-        print(*l)
+    # 공원의 높이와 너비 계산
+    H = len(park)
+    W = len(park[0])
 
-    for i in range(n):
-        for j in range(m):
-            if park[i][j] == 'S':
-                x, y = i, j
+    # 시작점 "S"의 인덱스 추출
+    for i, element in enumerate(park):
+        arr = list(element)
+        if "S" in arr:
+            start = [i, list(arr).index("S")]
+
+    pos = start
 
     for route in routes:
-        oper, count = route.split()
 
-        flag = True
-        sx, sy = x, y
+        # 명령어 입력 처리
+        op, n = route.split(' ')
+        n = int(n)
 
-        for i in range(int(count)):
-            dx, dy = op[oper]
-            nx, ny = x + dx, y + dy
+        obstacle = 0  #장애물을 마주칠시 1로 바뀌는 변수(스위치)
 
-            if 0 <= nx < m and 0 <= ny < n and park[nx][ny] != 'X':
-                x, y = nx, ny
+
+        # 북쪽으로 이동하는 경우
+        if op == 'N':
+            if pos[0] - n < 0:
+                print("Out of range: N")
+                continue
             else:
-                x, y = sx, sy
-                break
+                for i in range(1, n+1):
+                    if "X" == park[pos[0] - i][pos[1]]:
+                        obstacle = 1
+                        print("Obstacle encountered: N")
+                        continue
 
-    return x, y
+            if obstacle == 1:
+                continue
+            else:
+                pos[0] -= n
+                print("Operation Complete: N")
+
+        # 남쪽으로 이동하는 경우
+        elif op == 'S':
+            if pos[0] + n > H-1:
+                print("Out of range: S")
+                continue
+            else:
+                for i in range(1, n+1):
+                    if "X" == park[pos[0] + i][pos[1]]:
+                        obstacle = 1
+                        print("Obstacle encountered: S")
+                        continue
+
+            if obstacle == 1:
+                continue
+            else:                
+                pos[0] += n
+                print("Operation Complete: S")
+
+        # 서쪽으로 이동하는 경우
+        elif op == 'W':
+            if pos[1] - n < 0:
+                print("Out of range: W")
+                continue
+            else:
+                for i in range(1, n+1):
+                    if "X" == park[pos[0]][pos[1] - i]:
+                        obstacle = 1
+                        print("Obstacle encountered: W")
+                        continue
+
+            if obstacle == 1:
+                continue
+            else:
+                pos[1] -= n
+                print("Operation Complete: W")
+
+        # 동쪽으로 이동하는 경우
+        elif op == 'E':
+            if pos[1] + n > W-1:
+                print("Out of range: E")
+                continue
+            else:
+                for i in range(1, n+1):
+                    if "X" == park[pos[0]][pos[1] + i]:
+                        obstacle = 1
+                        print("Obstacle encountered: E")
+                        continue
+            if obstacle == 1:
+                continue
+            else:
+                pos[1] += n
+                print("Operation Complete: W")
+
+
+    answer = [pos[0], pos[1]]
+    return answer
