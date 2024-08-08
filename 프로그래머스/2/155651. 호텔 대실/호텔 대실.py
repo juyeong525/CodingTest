@@ -5,11 +5,6 @@ def solution(book_time):
         for b in book:
             book_int.append(toM(b))
         book_int_time.append(book_int)
-    # book_int
-    # front = sorted(book_int_time)
-    # back = sorted(book_int_time, key = lambda x: x[1])
-    # print(front)
-    # print(back)
     stack = []
     
     for i in sorted(book_int_time):
@@ -22,11 +17,8 @@ def solution(book_time):
             else:
                 stack.pop()
                 stack.append(i)
-        # print(stack)
     return len(stack)
-                
-        
-    return 0
+
 def toM(string):
     h, m = string.split(":")
     return int(h) * 60 + int(m)
